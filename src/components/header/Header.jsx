@@ -4,10 +4,12 @@ import NavButtons from "./NavButtons";
 
 export default function Header() {
   return (
-    <div className="bg-red-400 p-4 flex items-center  justify-between">
-      <Logo />
-      <NavButtons />
-      <Authentication />
-    </div>
+    <header className="p-4  text-violet-100 bg-violet-900">
+      <div className="container flex justify-between h-16 mx-auto items-center">
+        <NavButtons />
+        <Logo />
+        <Authentication />
+      </div>
+    </header>
   );
 }

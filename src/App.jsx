@@ -1,13 +1,10 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./components/footer/Footer";
 import Header from "./components/header/Header";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="flex min-h-screen justify-between flex-col">
+    <div className="flex min-h-screen justify-between flex-col ">
       <Header />
       <Outlet />
       <Footer />
