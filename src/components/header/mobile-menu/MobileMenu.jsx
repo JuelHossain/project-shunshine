@@ -3,7 +3,7 @@ import Search from "./Search";
 
 export default function MobileMenu() {
   return (
-    <div className="flex flex-col p-3 w-60 dark:bg-gray-900 dark:text-gray-100 absolute">
+    <div className="flex flex-col p-3 lg:hidden  dark:bg-gray-900 dark:text-gray-100 absolute right-0 ">
       <div className="space-y-3">
         <Search />
         <Navs />
