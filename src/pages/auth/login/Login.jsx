@@ -1,6 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading";
+import auth from "../../../firebase";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -10,17 +14,29 @@ export default function Login() {
   const setInput = (e) => {
     setForm((form) => ({ ...form, [e.target.name]: e.target.value }));
   };
+  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user && !error) {
+      setForm({ email: "", password: "" });
+      navigate("/");
+    }
+  },[error,user,setForm,navigate]);
+
   return (
     <div className="container mx-auto flex justify-center">
-      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-900 dark:text-gray-100">
+      <div className="flex flex-col max-w-md p-6 relative rounded-md sm:p-10 dark:bg-gray-900 dark:text-gray-100">
         <div className="mb-8 text-center">
           <h1 className="my-3 text-4xl font-bold">Sign in</h1>
           <p className="text-sm dark:text-gray-400">Sign in to access your account</p>
         </div>
+        {loading && <Loading />}
+
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            console.log(form);
+            const { email, password } = form;
+            await signInWithEmailAndPassword(email, password);
           }}
           className="space-y-12 ng-untouched ng-pristine ng-valid"
         >
@@ -64,6 +80,7 @@ export default function Login() {
                 className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
               />
             </div>
+            <p className="text-red-500">{error?.message}</p>
           </div>
           <div className="space-y-2">
             <div>

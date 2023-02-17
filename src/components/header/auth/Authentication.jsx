@@ -1,10 +1,15 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import { signOut } from "firebase/auth";
 import { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
+import auth from "../../../firebase";
 import MobileMenu from "../mobile-menu/MobileMenu";
 
 export default function Authentication() {
   const [open, setOpen] = useState(false);
   const toggle = () => setOpen((open) => !open);
+  const [user] = useAuthState(auth);
   return (
     <div>
       <div className="flex items-center md:space-x-4">
@@ -23,9 +28,19 @@ export default function Authentication() {
             className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none dark:bg-gray-800 dark:text-gray-100 focus:dark:bg-gray-900"
           />
         </div>
-        <Link to="/login" className="hidden px-6 py-2 font-semibold rounded lg:block bg-violet-400 text-gray-900">
-          Log in
-        </Link>
+        {user ? (
+          <button
+            onClick={() => signOut(auth)}
+            type="button"
+            className="hidden px-6 py-2 font-semibold rounded lg:block bg-violet-400 text-gray-900"
+          >
+            LogOut
+          </button>
+        ) : (
+          <Link to="/login" className="hidden px-6 py-2 font-semibold rounded lg:block bg-violet-400 text-gray-900">
+            Log in
+          </Link>
+        )}
       </div>
       <button onClick={toggle} title="Open menu" type="button" className="p-4 lg:hidden">
         <svg

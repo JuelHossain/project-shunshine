@@ -1,7 +1,12 @@
+/* eslint-disable import/order */
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-shadow */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading";
+import auth from "../../../firebase";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -13,17 +18,32 @@ export default function Register() {
     setForm((form) => ({ ...form, [e.target.name]: e.target.value }));
   };
 
+  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
+  const [updateProfile, updating, updateProfileError] = useUpdateProfile(auth);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user && !updating && !error && !updateProfileError) {
+      setForm({ name: "", email: "", password: "" });
+      navigate("/");
+    }
+  }, [user, updating, error, updateProfileError, setForm, navigate]);
+
   return (
     <div className="container mx-auto flex justify-center m-10">
-      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-900 dark:text-gray-100">
+      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10  relative dark:bg-gray-900 dark:text-gray-100">
         <div className="mb-8 text-center">
           <h1 className="my-3 text-4xl font-bold">Register</h1>
           <p className="text-sm dark:text-gray-400">Register Your Account</p>
         </div>
+        {(loading || updating) && <Loading />}
+
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            console.log(form);
+            const { name, email, password } = form;
+            await createUserWithEmailAndPassword(email, password);
+            await updateProfile({ displayName: name });
           }}
           className="space-y-12 ng-untouched ng-pristine ng-valid"
         >
@@ -82,6 +102,7 @@ export default function Register() {
                 className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
               />
             </div>
+            <p className="text-red-500">{error?.message || updateProfileError?.message}</p>
           </div>
           <div className="space-y-2">
             <div>
