@@ -28,13 +28,18 @@ export default function Companys() {
         <h2 className="text-5xl font-bold text-center dark:text-gray-50">Working with us</h2>
         <div className="grid gap-6 my-16 lg:grid-cols-3">
           {companys.map(({ name, logo, description }) => (
-            <div key={name} className="flex flex-col p-8 space-y-4 rounded-md dark:bg-gray-900">
-              <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 text-xl font-bold rounded-full bg-violet-400 dark:text-gray-900">
-                <img src={logo} alt={name} />
+            <div key={name} className="flex flex-col p-8 space-y-4 rounded-md dark:bg-gray-900 justify-between">
+              <div className="flex flex-col  space-y-4 ">
+                <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 text-xl font-bold rounded-full bg-violet-400 dark:text-gray-900">
+                  <img src={logo} alt={name} />
+                </div>
+
+                <p className="text-2xl font-semibold">{name}</p>
+                <hr />
+                <p className="">{description}</p>
               </div>
-              <p className="text-2xl font-semibold">{name}</p>
-              <hr />
-              <p className="">{description}</p>
+
+              <div className=" justify-self-end py-2 px-4 bg-violet-400 dark:text-gray-900">View Details</div>
             </div>
           ))}
         </div>
