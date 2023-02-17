@@ -1,6 +1,9 @@
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
+import auth from "../../firebase";
 
 export default function About() {
+  const [user] = useAuthState(auth);
   return (
     <section className="dark:bg-gray-800 dark:text-gray-100">
       <div className="container flex flex-col justify-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:justify-between">
@@ -24,10 +27,10 @@ export default function About() {
           <div className="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start">
             <Link
               rel="noopener noreferrer"
-              to="/login"
+              to={user ? "/contact" : "/login"}
               className="px-8 py-3 text-lg font-semibold rounded dark:bg-violet-400 dark:text-gray-900"
             >
-              Login Now
+              {user ? "Contact Us" : "Login Now"}
             </Link>
             <Link
               rel="noopener noreferrer"
